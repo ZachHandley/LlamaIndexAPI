@@ -1,0 +1,341 @@
+[tool.poetry]
+name = "AI Docker Image"
+version = "0.0.1"
+description = "A docker image with preinstalled packages to get your Llama Index and everything setup faster using Poetry"
+authors = ["Zachary Handley"]
+# New attributes
+license = "MIT"
+readme = "README.md"
+homepage = "https://zachhandley.com"
+repository = "https://github.com/zachhandley/AIDockerImage"
+keywords = ["ai", "docker", "python", "python3.11", "llama-index", "langchain"]
+include = ["LICENSE"]
+
+[tool.poetry.dependencies]
+# Updated Python version
+python = ">=3.11.4,<4.0"
+# langchain = ">=0.0.250"
+# pydantic = ">=2.0.0"
+llama-index = "^0.8.5.post2"
+anthropic = "^0.3.10"
+appwrite = "^2.0.2"
+asyncio = "^3.4.3"
+requests = "^2.31.0"
+pypdf = "^3.15.2"
+lxml = "^4.9.3"
+sentence-transformers = "^2.2.2"
+guidance = "^0.0.64"
+fastapi = "^0.101.1"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+gunicorn = "^21.2.0"
+
+
+[tool.poetry.dev-dependencies]
+typing-inspect = "0.8.0"
+typing_extensions = "4.5.0"
+types-requests = "2.28.11.8"
+black = "22.12.0"
+isort = "5.11.4"
+
+
+[build-system]
+requires = ["poetry>=0.12", "poetry-core>=1.0.0"]
+build-backend = "poetry.masonry.api"
+
+#aiofiles==23.1.0
+# aiohttp==3.8.4
+# aiosignal==1.3.1
+# aiosqlite==0.19.0
+# aiostream==0.4.5
+# altair==4.2.2
+# anthropic==0.3.6
+# anyio==3.6.2
+# appdirs==1.4.4
+# appwrite==2.0.0
+# argilla==1.7.0
+# art==6.0
+# asgiref==3.6.0
+# assemblyai==0.11.0
+# async-generator==1.10
+# async-timeout==4.0.2
+# asyncio==3.4.3
+# attrs==22.2.0
+# backoff==2.2.1
+# beautifulsoup4==4.11.2
+# beckett==0.8.0
+# blinker==1.5
+# blis==0.7.9
+# bs4==0.0.1
+# build==0.10.0
+# CacheControl==0.12.14
+# cachetools==5.3.0
+# catalogue==2.0.8
+# cchardet==2.1.7
+# certifi==2022.12.7
+# cffi==1.15.1
+# chardet==3.0.4
+# charset-normalizer==2.0.12
+# chromadb==0.3.22
+# cleo==2.0.1
+# click==8.1.3
+# clickhouse-connect==0.5.24
+# cloudpickle==2.2.1
+# colorama==0.4.6
+# coloredlogs==15.0.1
+# commonmark==0.9.1
+# confection==0.0.4
+# contourpy==1.0.7
+# crashtest==0.4.1
+# cryptography==40.0.2
+# cssselect==1.2.0
+# cycler==0.11.0
+# cymem==2.0.7
+# Cython==3.0.0
+# dataclasses-json==0.5.7
+# Deprecated==1.2.13
+# diff-match-patch==20230430
+# diskcache==5.6.1
+# distlib==0.3.6
+# distro==1.8.0
+# dnspython==2.3.0
+# docker==6.0.1
+# docutils==0.20.1
+# duckdb==0.7.1
+# duckduckgo-search==2.8.5
+# dulwich==0.21.5
+# email-validator==2.0.0.post2
+# en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl#sha256=0964370218b7e1672a30ac50d72cdc6b16f7c867496f1d60925691188f4d2510
+# entrypoints==0.4
+# et-xmlfile==1.1.0
+# exceptiongroup==1.1.1
+# Farama-Notifications==0.0.4
+# fastapi==0.95.0
+# ffmpy==0.3.0
+# filelock==3.12.2
+# fire==0.5.0
+# Flask==2.1.1
+# Flask-PyNgrok==1.0.3
+# flatbuffers==23.5.26
+# fonttools==4.39.3
+# frozenlist==1.3.3
+# fsspec==2023.6.0
+# geographiclib==1.52
+# geopy==2.2.0
+# google-api-core==2.11.0
+# google-api-python-client==2.84.0
+# google-auth==2.17.2
+# google-auth-httplib2==0.1.0
+# google-auth-oauthlib==1.0.0
+# googleapis-common-protos==1.59.0
+# gpt4all==0.3.4
+# gptcache==0.1.30
+# gradio==3.24.1
+# gradio_client==0.0.8
+# greenlet==2.0.2
+# grpclib==0.4.3
+# gTTS==2.3.1
+# guidance==0.0.61
+# gymnasium==0.28.1
+# h11==0.14.0
+# h2==3.2.0
+# hnswlib==0.7.0
+# hpack==3.0.0
+# html5lib==1.1
+# httpcore==0.16.3
+# httplib2==0.22.0
+# httptools==0.5.0
+# httpx==0.23.3
+# huggingface-hub==0.14.1
+# humanfriendly==10.0
+# hypercorn==0.14.3
+# hyperframe==5.2.0
+# idna==2.10
+# importlib-metadata==6.6.0
+# inflect==0.2.5
+# iniconfig==2.0.0
+# install==1.3.5
+# installer==0.7.0
+# itsdangerous==2.1.2
+# jaraco.classes==3.2.3
+# javascript==1!1.0.2
+# jax-jumpy==1.0.0
+# Jinja2==3.1.2
+# joblib==1.2.0
+# jq==1.4.1
+# jsonschema==4.17.3
+# keyring==23.13.1
+# kiwisolver==1.4.4
+# langchain==0.0.170
+# langcodes==3.3.0
+# linkify-it-py==2.0.0
+# llama-cpp-python==0.1.62
+# llama-index==0.6.24
+# lockfile==0.12.2
+# loguru==0.6.0
+# lupa==2.0
+# lxml==4.9.2
+# lz4==4.3.2
+# Markdown==3.4.3
+# markdown-it-py==2.2.0
+# MarkupSafe==2.1.2
+# marshmallow==3.19.0
+# marshmallow-enum==1.5.1
+# matplotlib==3.7.1
+# mdit-py-plugins==0.3.3
+# mdurl==0.1.2
+# metagpt==0.1
+# metaphor-python==0.1.14
+# modal-client==0.49.2197
+# monotonic==1.6
+# more-itertools==9.1.0
+# mpmath==1.3.0
+# msal==1.22.0
+# msg-parser==1.2.0
+# msgpack==1.0.5
+# multidict==6.0.4
+# murmurhash==1.0.9
+# mypy-extensions==1.0.0
+# nest-asyncio==1.5.6
+# networkx==3.1
+# nltk==3.8.1
+# numexpr==2.8.4
+# numpy==1.24.3
+# oauthlib==3.2.2
+# olefile==0.46
+# onnxruntime==1.15.0
+# openai==0.27.2
+# openapi-schema-pydantic==1.2.4
+# openpyxl==3.1.2
+# orjson==3.8.9
+# ort-nightly==1.16.0.dev20230528001
+# outcome==1.2.0
+# packaging==23.0
+# pandas==1.5.3
+# parsimonious==0.10.0
+# pathy==0.10.1
+# pdfminer.six==20221105
+# pexpect==4.8.0
+# Pillow==9.5.0
+# pinecone-client==2.2.1
+# pkginfo==1.9.6
+# platformdirs==3.5.3
+# playsound==1.2.2
+# pluggy==1.0.0
+# poetry==1.5.1
+# poetry-core==1.6.1
+# poetry-plugin-export==1.4.0
+# -e git+https://github.com/ZachHandley/PokemonAI.git@dd846e46caffb3b6dadce5bad7076a3bc979e18d#egg=pokemaster
+# pokepy==0.4.0
+# posthog==3.0.1
+# preshed==3.0.8
+# prettyprint==0.1.5
+# priority==2.0.0
+# protobuf==4.23.4
+# psutil==5.9.5
+# ptyprocess==0.7.0
+# pyasn1==0.4.8
+# pyasn1-modules==0.2.8
+# PyAudio==0.2.13
+# pycparser==2.21
+# pydantic==1.10.7
+# pydub==0.25.1
+# Pygments==2.15.1
+# pygtrie==2.5.0
+# pyhumps==3.8.0
+# PyJWT==2.7.0
+# pymessenger==0.0.7.0
+# pyngrok==6.0.0
+# pypandoc==1.11
+# pyparsing==3.0.9
+# pypdf==3.15.1
+# pyproject_hooks==1.0.0
+# -e git+https://www.github.com/morph-labs/rift@8494064d33549e32ef402d505041eb6039630893#egg=pyrift&subdirectory=rift-engine
+# pyrsistent==0.19.3
+# PySocks==1.7.1
+# pytest==7.2.2
+# python-dateutil==2.8.2
+# python-docx==0.8.11
+# python-dotenv==1.0.0
+# python-magic==0.4.27
+# python-multipart==0.0.6
+# python-pptx==0.6.21
+# pytz==2023.3
+# PyYAML==6.0
+# quart==0.18.4
+# quart-schema==0.16.0
+# Random-Word==1.0.11
+# rapidfuzz==2.15.1
+# readability-lxml==0.8.1
+# regex==2023.3.23
+# requests==2.31.0
+# requests-oauthlib==1.3.1
+# requests-toolbelt==1.0.0
+# rfc3986==1.5.0
+# rich==13.0.1
+# rsa==4.9
+# scikit-learn==1.2.2
+# scipy==1.10.1
+# selenium==4.10.0
+# semantic-version==2.10.0
+# sentence-transformers==2.2.2
+# sentencepiece==0.1.99
+# shellingham==1.5.0.post1
+# sigtools==4.0.1
+# six==1.10.0
+# smart-open==6.3.0
+# sniffio==1.3.0
+# sortedcontainers==2.4.0
+# soupsieve==2.4
+# spacy==3.5.3
+# spacy-legacy==3.0.12
+# spacy-loggers==1.0.4
+# SQLAlchemy==2.0.16
+# srsly==2.4.6
+# starlette==0.26.1
+# sympy==1.12
+# synchronicity==0.5.2
+# tblib==1.7.0
+# tenacity==8.2.2
+# termcolor==2.3.0
+# thinc==8.1.10
+# threadpoolctl==3.1.0
+# tiktoken==0.3.3
+# tokenizers==0.13.3
+# toml==0.10.2
+# tomlkit==0.11.8
+# toolz==0.12.0
+# torch==2.0.1
+# torchaudio==2.0.2
+# torchvision==0.15.2
+# tqdm==4.64.0
+# transformers==4.29.1
+# trio==0.22.0
+# trio-websocket==0.10.3
+# trove-classifiers==2023.5.24
+# typer==0.7.0
+# types-certifi==2021.10.8.3
+# types-toml==0.10.8.6
+# typing-inspect==0.8.0
+# typing_extensions==4.5.0
+# tzdata==2023.3
+# uc-micro-py==1.0.1
+# ujson==5.8.0
+# unstructured==0.6.6
+# uritemplate==4.1.1
+# urllib3==1.26.14
+# uvicorn==0.21.1
+# uvloop==0.17.0
+# virtualenv==20.23.1
+# wasabi==1.1.1
+# watchfiles==0.19.0
+# webencodings==0.5.1
+# websocket-client==1.5.1
+# websockets==11.0.1
+# Werkzeug==2.3.4
+# wrapt==1.14.1
+# wsproto==1.2.0
+# xattr==0.10.1
+# XlsxWriter==3.1.0
+# yarl==1.8.2
+# zipp==3.15.0
+# zstandard==0.21.0
