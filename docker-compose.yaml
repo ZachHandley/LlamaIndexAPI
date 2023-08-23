@@ -5,4 +5,4 @@ services:
   llamaindexapi:
     image: llamaindexapi
     ports:
-      - "8682:8682"
+      - "8632:8632"
