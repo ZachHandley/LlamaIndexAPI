@@ -3,7 +3,7 @@
 set -e
 
 # activate the virtual environment created by Poetry
-. /opt/poetry/cache/virtualenvs
+. /venv/bin/activate
 
 # run the command passed to the entrypoint
-exec "$@"
+exec gunicorn -k uvicorn.workers.UvicornWorker -c ./gunicorn_conf.py app.main:app

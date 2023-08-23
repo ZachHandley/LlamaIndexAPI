@@ -3,6 +3,9 @@
 import json
 import multiprocessing
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 workers_per_core_str = os.getenv("WORKERS_PER_CORE", "1")
 web_concurrency_str = os.getenv("WEB_CONCURRENCY", None)
