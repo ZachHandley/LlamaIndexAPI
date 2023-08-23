@@ -8,11 +8,9 @@ FROM duffn/python-poetry:${PYTHON_IMAGE_TAG} AS python-poetry-base
 
 COPY ./poetry.lock ./pyproject.toml ./
 
-COPY ./docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
 # Poetry is installed with `pip` so activate our virtual environment and install projects dependencies
 RUN . $VENV_PATH/bin/activate && $POETRY_HOME/poetry install --no-root
-
+EXPOSE 8632
 WORKDIR /app
 COPY . .
 
@@ -24,7 +22,7 @@ USER nonroot
 
 # Use `tini` to start our container
 ENTRYPOINT ["tini", "--"]
-CMD ["/docker-entrypoint.sh"]
+CMD ["./docker-entrypoint.sh"]
 ###############################################################################
 # POETRY RUNTIME IMAGE - Copies the poetry installation into a smaller image
 ###############################################################################

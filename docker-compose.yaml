@@ -3,8 +3,6 @@ version: '3.8'
 
 services:
   llamaindexapi:
-    build: .
-    container_name: llamaindexapi
-    # command: poetry run uvicorn main:app --host 0.0.0.0 --port 3682
+    image: llamaindexapi
     ports:
-      - "3682:3682"
+      - "8682:8682"
