@@ -5,4 +5,4 @@
 ### Usage
 `docker pull zachhandley/llamaindexapi`
 
-It is currently set to `0.8.7` for Llama Index
+It is currently set to `0.8.21` for Llama Index

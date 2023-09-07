@@ -16,7 +16,7 @@ include = ["LICENSE"]
 python = ">=3.11.4,<4.0"
 # langchain = ">=0.0.250"
 # pydantic = ">=2.0.0"
-llama-index = "^0.8.7"
+llama-index = "^0.8.21"
 anthropic = "^0.3.10"
 appwrite = "^2.0.2"
 asyncio = "^3.4.3"
