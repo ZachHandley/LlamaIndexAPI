@@ -6,4 +6,4 @@ set -e
 . /venv/bin/activate
 
 # run the command passed to the entrypoint
-exec gunicorn -k uvicorn.workers.UvicornWorker -c ./gunicorn_conf.py --preload app.main:app
+exec gunicorn -k uvicorn.workers.UvicornWorker -c ./gunicorn_conf.py --timeout 600 --preload app.main:app --loop="asyncio"

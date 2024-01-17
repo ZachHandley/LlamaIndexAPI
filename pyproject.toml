@@ -1,22 +1,25 @@
 [tool.poetry]
-name = "AI Docker Image"
+name = "LlamaIndexAPI"
 version = "0.0.1"
-description = "A docker image with preinstalled packages to get your Llama Index and everything setup faster using Poetry"
+description = "A FastAPI starter point for Llama Index projects"
 authors = ["Zachary Handley"]
 # New attributes
 license = "MIT"
 readme = "README.md"
 homepage = "https://zachhandley.com"
-repository = "https://github.com/zachhandley/AIDockerImage"
-keywords = ["ai", "docker", "python", "python3.11", "llama-index", "langchain"]
+repository = "https://github.com/zachhandley/LlamaIndexAPI"
+keywords = ["ai", "docker", "python", "python3.11", "llama-index", "fastapi"]
 include = ["LICENSE"]
+packages = [
+    { include = "app" }
+]
 
 [tool.poetry.dependencies]
 # Updated Python version
-python = ">=3.11.4,<4.0"
+python = ">=3.11.4,<3.12"
 # langchain = ">=0.0.250"
 # pydantic = ">=2.0.0"
-llama-index = "^0.8.21"
+llama-index = "^0.9.26"
 anthropic = "^0.3.10"
 appwrite = "^2.0.2"
 asyncio = "^3.4.3"
@@ -25,10 +28,24 @@ pypdf = "^3.15.2"
 lxml = "^4.9.3"
 sentence-transformers = "^2.2.2"
 guidance = "^0.0.64"
-fastapi = "^0.101.1"
 uvicorn = { extras = ["standard"], version = "^0.23.2" }
 gunicorn = "^21.2.0"
-docker = "^6.1.3"
+trafilatura = "^1.6.1"
+torch = ">=2.0.0, !=2.0.1"
+metaphor-python = "^0.1.16"
+nest-asyncio = "^1.5.7"
+fastapi = "^0.99"
+langchain = "^0.0.340"
+ftfy = "^6.1.3"
+regex = "^2023.12.25"
+tqdm = "^4.66.1"
+clip = {git = "https://github.com/openai/CLIP.git"}
+matplotlib = "^3.8.2"
+scikit-image = "^0.22.0"
+torchvision = "^0.16.2"
+qdrant-client = "^1.7.0"
+pillow = "^10.2.0"
+aiohttp = "^3.9.1"
 
 
 [tool.poetry.dev-dependencies]
@@ -46,9 +63,6 @@ pylint = "2.16.2"
 testcontainers = "3.7.1"
 bcrypt = "4.0.1"
 
-# [tool.poetry.scripts]
-# start = "app.__main__:start"
-
 # https://docs.pytest.org/en/latest/reference/customize.html
 [tool.pytest.ini_options]
 addopts = "--ignore=tests/functionality/test_worker_reload.py"
@@ -57,7 +71,7 @@ testpaths = ["tests"]
 # https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
 [tool.black]
 line-length = 80
-target-version = ['py39']
+target-version = ['py311']
 
 [tool.pylint.main]
 errors-only = true

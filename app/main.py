@@ -1,9 +1,8 @@
-from fastapi import FastAPI
+from uvicorn import Config, Server as UvicornServer
+from app.server import Server
 
 
-app = FastAPI()
-
-
-@app.get("/")
-async def main_route():
-    return "Hey, It is me Goku"
+def start():
+    print("Running Server")
+    app = Server().app
+    return app
