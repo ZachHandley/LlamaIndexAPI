@@ -102,8 +102,8 @@ class Server:
             )
             await vectordb.ingest_text(
                 text.userId,
-                text_document.get("$id"),  # type: ignore
-                text_document.get("text"),  # type: ignore
+                random.random() * 1000000000000000,
+                text.text,
             )
             return ServerResponse(
                 status=200,
