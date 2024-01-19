@@ -120,7 +120,7 @@ class TextIngestionRequest(BaseModel):
         default=False,
         description="Whether the text was created by the user or is simply associated e.g. retweet on Twitter, share on Facebook.",
     )
-    imageId: str | None = Field(
+    imageId: str | bytes | None = Field(
         default=None,
         description="If the user has an image associated with the text (e.g. Instagram) then this is the unique identifier for the image stored in the user's image collection.",
     )

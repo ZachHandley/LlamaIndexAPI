@@ -20,6 +20,7 @@ def test_server():
         text="This is a test text",
         source="test",
         language="en",
+        isUsersCreation=True,
     )
     print(f"Testing text ingestion with request: {text_request}")
     response = requests.post(

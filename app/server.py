@@ -53,6 +53,12 @@ class Server:
             allow_methods=["*"],
             allow_headers=["*"],
         )
+
+        @self.app.on_event("startup")
+        async def startup_event():
+            print("Initializing Vector Database")
+            await VectorStore.get_instance()
+
         self.router = APIRouter()
         self.router.add_api_route(
             "/",
@@ -96,10 +102,7 @@ class Server:
         This method is used to ingest and store text data.
         """
         try:
-            vectordb = await VectorStore.get_instance(
-                user_id=text.userId,
-                has_text_store=False,
-            )
+            vectordb = await VectorStore.get_instance()
             await vectordb.ingest_text(
                 text.userId,
                 random.random() * 1000000000000000,
@@ -125,10 +128,7 @@ class Server:
         This method is used to ingest and store image data and optionally text data.
         """
         try:
-            vectordb = await VectorStore.get_instance(
-                user_id=image_request.userId,
-                has_text_store=False,
-            )
+            vectordb = await VectorStore.get_instance()
             if (
                 image_request.image_url is not None
                 and len(image_request.image_url) > 0
@@ -136,7 +136,6 @@ class Server:
                 image_request.image = await fetch_image_from_url(
                     image_request.image_url
                 )
-                document_id = document.get("$id")  # type: ignore
                 if image_request.text_request is not None:
                     await vectordb.ingest_text(
                         image_request.userId,
@@ -145,12 +144,12 @@ class Server:
                     )
                 await vectordb.ingest_image(
                     image_request=image_request,
-                    image_id=document_id,
+                    image_id=random.random() * 1000000000000000,
                 )
                 return ServerResponse(
                     status=200,
                     message="Image and Text (if provided) Ingested",
-                    data=document,
+                    data=None,
                 )
             elif image_request.image is not None:
                 image_id = math.floor(random.random() * 1000000000000000)
@@ -191,10 +190,7 @@ class Server:
         """
         try:
             print(f"Generating summary for user {assessment.userId}")
-            actions = await AIActions.get_instance(
-                user_id=assessment.userId,
-                has_text_store=False,
-            )
+            actions = await AIActions.get_instance()
             print(f"Got AIActions instance for user {assessment.userId}")
             summary = await actions.summarize_user(assessment.userId)
             print(f"Generated summary for user {assessment.userId}")

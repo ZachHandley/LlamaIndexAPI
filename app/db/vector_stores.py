@@ -47,78 +47,53 @@ class VectorStore:
     It uses the Qdrant client to create and manage collections of text and image data for each user.
     """
 
+    _qdrant_client = QdrantClient(url="http://localhost")
+    _qdrant_client_async: AsyncQdrantClient | None = None
+    _text_store: QdrantVectorStore | None = None
+    _image_store: QdrantVectorStore | None = None
+    _index: MultiModalVectorStoreIndex | None = None
     _agent = OpenAI(
         model="gpt-4-1106-preview",
         temperature=0.0,
     )
     _multi_modal_agent = OpenAIMultiModal(
-        model="gpt-4-1106-preview",
+        model="gpt-4-vision-preview",
         temperature=0.0,
     )
 
     @classmethod
-    async def get_instance(cls, user_id: str, has_text_store: bool = False):
+    async def get_instance(cls):
         """
         Get the instance of the VectorStore class. If it doesn't exist, create a new one.
         """
-        vector_store = cls()
-        await vector_store._async_init(
-            user_id=user_id, has_text_store=has_text_store
-        )
-        return vector_store
+        self = cls()
+        if cls._qdrant_client_async is None:
+            cls._qdrant_client_async = AsyncQdrantClient(url="http://localhost")
+        if cls._text_store is None or cls._image_store is None:
+            cls._text_store = QdrantVectorStore(
+                "global_text_store",
+                client=cls._qdrant_client,
+                aclient=cls._qdrant_client_async,
+            )
+            cls._image_store = QdrantVectorStore(
+                "global_image_store",
+                client=cls._qdrant_client,
+                aclient=cls._qdrant_client_async,
+            )
+        if cls._index is None:
+            cls._index = MultiModalVectorStoreIndex.from_vector_store(
+                vector_store=cls._text_store,
+                image_vector_store=cls._image_store,
+                use_async=True,
+                show_progress=True,
+            )
+        return self
 
     def __init__(self):
         """
         Initialize the VectorStore class. If an instance already exists, raise an exception.
         """
-        # Create the Qdrant connection -- Local for now
-        print("Creating Qdrant Client")
-        self.qdrant_client = QdrantClient(url="http://localhost")
-        print("Qdrant Client Created")
-        self.user_text_store: QdrantVectorStore | None = None
-        self.user_image_store: QdrantVectorStore | None = None
-        self.user_storage_context: StorageContext | None = None
-        self.user_index: MultiModalVectorStoreIndex | None = None
-        # Create the Qdrant Vector Stores for the global index
-        self.text_store: QdrantVectorStore | None = None
-        self.image_store: QdrantVectorStore | None = None
-        self.storage_context: StorageContext | None = None
-
-        # Create the MultiModal index for use in our global queries (application wide knowledgebase)
-        self.index: MultiModalVectorStoreIndex | None = None
-
-    async def _async_init(self, user_id: str, has_text_store: bool = False):
-        # Create the Qdrant connection -- Local for now
-        print("Creating Async Qdrant Client")
-        self.qdrant_client_async = AsyncQdrantClient(url="http://localhost")
-        print("Async Qdrant Client Initialized, initializing user index")
-        await self.init_or_get_user_index(
-            user_id=user_id, has_text_store=has_text_store
-        )
-        print("User Index initialized")
-        # Create the Qdrant Vector Stores
-        self.text_store = QdrantVectorStore(
-            client=self.qdrant_client,
-            aclient=self.qdrant_client_async,
-            collection_name="global_text_store",
-        )
-        self.image_store = QdrantVectorStore(
-            client=self.qdrant_client,
-            aclient=self.qdrant_client_async,
-            collection_name="global_image_store",
-        )
-        self.storage_context = StorageContext.from_defaults(
-            vector_store=self.text_store,
-            image_store=self.image_store,
-        )
-
-        # Create the MultiModal index for use in our global queries (application wide knowledgebase)
-        self.index = MultiModalVectorStoreIndex(
-            nodes=[],
-            storage_context=self.storage_context,
-            use_async=True,
-            show_progress=True,
-        )
+        pass
 
     async def init_or_get_user_index(
         self,
@@ -134,39 +109,15 @@ class VectorStore:
         Returns:
             MultiModalVectorStoreIndex: The initialized or retrieved index.
         """
-
-        if self.user_index is not None:
-            return self.user_index
-
-        self.user_text_store = QdrantVectorStore(
-            client=self.qdrant_client,
-            aclient=self.qdrant_client_async,
-            collection_name=f"{user_id}_text",
-        )
-        self.user_image_store = QdrantVectorStore(
-            client=self.qdrant_client,
-            aclient=self.qdrant_client_async,
-            collection_name=f"{user_id}_image",
-        )
-        self.user_storage_context = StorageContext.from_defaults(
-            vector_store=self.user_text_store,
-            image_store=self.user_image_store,
-        )
-        self.user_index = MultiModalVectorStoreIndex(
-            nodes=[],
-            storage_context=self.user_storage_context,
-            use_async=True,
-            show_progress=True,
-        )
         if not has_text_store:
             print("Inserting global user document for new collection")
-            self.user_index.insert(
+            self._index.insert(
                 Document(
                     doc_id=f"{user_id}",
                     text=f"{user_id} is the users global Appwrite User ID",
                 )
             )
-        return self.user_index
+        return self._index
 
     async def ingest_text(self, user_id: str, text_id: str, text: str) -> None:
         """
@@ -182,6 +133,9 @@ class VectorStore:
         document = Document(
             doc_id=f"{user_id}_{text_id}",
             text=text,
+            metadata={
+                "user_id": user_id,
+            },
         )
         index.insert(document=document)
 
@@ -199,12 +153,19 @@ class VectorStore:
             image_url (str | None): The URL of the image to be ingested.
             image_data (str | None): The Base64 encoded image to be ingested.
         """
-        image_data = image_req_to_base64(image_request)
+        image_data = await image_req_to_base64(image_request)
         index = await self.init_or_get_user_index(user_id=image_request.userId)
-        # Create the image node
-        image_node = ImageNode(
+        # Create the image document
+        image_doc = ImageDocument(
             doc_id=f"{image_id}",
             image=image_data,
+            metadata={
+                "user_id": image_request.userId,
+            },
+            text=image_request.text_request.text
+            if image_request.text_request
+            else "",
+            image_mimetype=image_request.mimetype,
         )
         # insert the node
-        index.insert_nodes(nodes=[image_node])
+        index.insert(image_doc)
