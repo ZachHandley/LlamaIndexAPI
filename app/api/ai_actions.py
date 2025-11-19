@@ -5,14 +5,14 @@ This module contains the AIActions class which is responsible for creating detai
 # External Libraries
 import openai
 from dotenv import load_dotenv
-from llama_index import PromptTemplate
-from llama_index.llms import OpenAI
-from llama_index.multi_modal_llms import OpenAIMultiModal
-from llama_index.query_engine import SimpleMultiModalQueryEngine
-from llama_index.indices.multi_modal.retriever import (
+from llama_index.core.prompts import PromptTemplate
+from llama_index.llms.openai import OpenAI
+from llama_index.multi_modal_llms.openai import OpenAIMultiModal
+from llama_index.core.query_engine import SimpleMultiModalQueryEngine
+from llama_index.core.indices.multi_modal.retriever import (
     MultiModalVectorIndexRetriever,
 )
-from llama_index.vector_stores.types import MetadataFilter, MetadataFilters
+from llama_index.core.vector_stores.types import MetadataFilter, MetadataFilters
 
 # Local Libraries
 from app.db.vector_stores import VectorStore

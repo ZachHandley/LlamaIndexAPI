@@ -1,48 +1,60 @@
-# Default to the latest bookworm version of Python at the time of writing 3.11.4
-ARG PYTHON_IMAGE_TAG=3.11.4-slim-1.6.1
+# Use Python 3.12 slim image
+FROM python:3.12-slim-bookworm AS base
+
+# Install system dependencies and UV
+RUN apt-get update && apt-get install -y \
+    curl \
+    tini \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install UV
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_SYSTEM_PYTHON=1
 
 ###############################################################################
-# POETRY BASE IMAGE - Provides environment variables for poetry
+# BUILDER IMAGE - Install dependencies
 ###############################################################################
-FROM duffn/python-poetry:${PYTHON_IMAGE_TAG} AS python-poetry-base
+FROM base AS builder
 
-COPY ./poetry.lock ./pyproject.toml ./
-
-# Poetry is installed with `pip` so activate our virtual environment and install projects dependencies
-RUN . $VENV_PATH/bin/activate && $POETRY_HOME/poetry install --no-root
-EXPOSE 8632
 WORKDIR /app
+
+# Copy dependency files
+COPY pyproject.toml ./
+
+# Install dependencies using UV
+RUN uv pip install --system -r pyproject.toml
+
+###############################################################################
+# RUNTIME IMAGE - Final slim image with dependencies
+###############################################################################
+FROM base AS runtime
+
+WORKDIR /app
+
+# Copy installed dependencies from builder
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Copy application code
 COPY . .
 
-# Our user has an ID of 10000 and the group an ID of 10001.
-RUN chown 10000:10001 -R /app
+# Create non-root user with ID 10000 and group ID 10001
+RUN groupadd -g 10001 nonroot && \
+    useradd -u 10000 -g nonroot -m -s /bin/bash nonroot && \
+    chown -R 10000:10001 /app
 
-# Our non-root username
+# Switch to non-root user
 USER nonroot
 
-# Use `tini` to start our container
+# Expose port
+EXPOSE 8632
+
+# Use tini as init system
 ENTRYPOINT ["tini", "--"]
+
+# Run the application
 CMD ["./docker-entrypoint.sh"]
-###############################################################################
-# POETRY RUNTIME IMAGE - Copies the poetry installation into a smaller image
-###############################################################################
-# FROM python-poetry-base AS python-poetry
-# COPY --from=python-poetry-builder $POETRY_HOME $POETRY_HOME
-
-# ENV FASTAPI_ENV=production
-
-# # Set workdir and copy project files
-# WORKDIR /app
-
-# COPY poetry.lock pyproject.toml ./
-# RUN poetry config virtualenvs.create false
-# RUN poetry install
-# COPY gunicorn_conf.py /gunicorn_conf.py
-# COPY docker-entrypoint.sh /docker-entrypoint.sh
-# RUN chmod +x /docker-entrypoint.sh
-# COPY . .
-
-# EXPOSE 3682
-# ENTRYPOINT /docker-entrypoint.sh $0 $@
-# # CMD ["uvicorn", "--reload", "main:app"]
-# CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app"]

@@ -5,15 +5,14 @@ The VectorStore class is a singleton, meaning there can only be one instance of 
 """
 
 # External Libraries
-from llama_index.indices.multi_modal.base import MultiModalVectorStoreIndex
-from llama_index.vector_stores import QdrantVectorStore, SimpleVectorStore
-from llama_index import SimpleDirectoryReader, StorageContext
-from llama_index.llms import OpenAI
-from llama_index.multi_modal_llms import OpenAIMultiModal
-from llama_index.prompts import PromptTemplate
-from llama_index.query_engine import SimpleMultiModalQueryEngine
-from llama_index import Document
-from llama_index.schema import ImageDocument, ImageNode
+from llama_index.core.indices.multi_modal.base import MultiModalVectorStoreIndex
+from llama_index.vector_stores.qdrant import QdrantVectorStore
+from llama_index.core import SimpleDirectoryReader, StorageContext, Document
+from llama_index.llms.openai import OpenAI
+from llama_index.multi_modal_llms.openai import OpenAIMultiModal
+from llama_index.core.prompts import PromptTemplate
+from llama_index.core.query_engine import SimpleMultiModalQueryEngine
+from llama_index.core.schema import ImageDocument, ImageNode
 from PIL import Image
 import aiohttp
 import qdrant_client

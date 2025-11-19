@@ -1,67 +1,76 @@
-[tool.poetry]
+[project]
 name = "LlamaIndexAPI"
 version = "0.0.1"
 description = "A FastAPI starter point for Llama Index projects"
-authors = ["Zachary Handley"]
-# New attributes
-license = "MIT"
+authors = [
+    { name = "Zachary Handley", email = "zach@zachhandley.com" }
+]
+license = { text = "MIT" }
 readme = "README.md"
-homepage = "https://zachhandley.com"
-repository = "https://github.com/zachhandley/LlamaIndexAPI"
-keywords = ["ai", "docker", "python", "python3.11", "llama-index", "fastapi"]
-include = ["LICENSE"]
-packages = [
-    { include = "app" }
+requires-python = ">=3.11"
+keywords = ["ai", "docker", "python", "llama-index", "fastapi"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 
-[tool.poetry.dependencies]
-# Updated Python version
-python = ">=3.11.4,<3.12"
-# langchain = ">=0.0.250"
-# pydantic = ">=2.0.0"
-llama-index = "^0.9.26"
-anthropic = "^0.3.10"
-appwrite = "^2.0.2"
-asyncio = "^3.4.3"
-requests = "^2.31.0"
-pypdf = "^3.15.2"
-lxml = "^4.9.3"
-sentence-transformers = "^2.2.2"
-guidance = "^0.0.64"
-uvicorn = { extras = ["standard"], version = "^0.23.2" }
-gunicorn = "^21.2.0"
-trafilatura = "^1.6.1"
-torch = ">=2.0.0, !=2.0.1"
-metaphor-python = "^0.1.16"
-nest-asyncio = "^1.5.7"
-fastapi = "^0.99"
-langchain = "^0.0.340"
-ftfy = "^6.1.3"
-regex = "^2023.12.25"
-tqdm = "^4.66.1"
-clip = {git = "https://github.com/openai/CLIP.git"}
-matplotlib = "^3.8.2"
-scikit-image = "^0.22.0"
-torchvision = "^0.16.2"
-qdrant-client = "^1.7.0"
-pillow = "^10.2.0"
-aiohttp = "^3.9.1"
+dependencies = [
+    # Modern LlamaIndex packages (modular structure)
+    "llama-index-core>=0.12.0",
+    "llama-index-llms-openai>=0.3.0",
+    "llama-index-multi-modal-llms-openai>=0.3.0",
+    "llama-index-vector-stores-qdrant>=0.4.0",
+    "llama-index-embeddings-openai>=0.3.0",
+    "llama-index-readers-file>=0.3.0",
+    # Core dependencies
+    "anthropic>=0.39.0",
+    "appwrite>=6.0.0",
+    "requests>=2.32.0",
+    "pypdf>=5.1.0",
+    "lxml>=5.3.0",
+    "sentence-transformers>=3.3.0",
+    "uvicorn[standard]>=0.32.0",
+    "gunicorn>=23.0.0",
+    "trafilatura>=2.0.0",
+    "torch>=2.5.0",
+    "nest-asyncio>=1.6.0",
+    "fastapi>=0.115.0",
+    "langchain>=0.3.0",
+    "ftfy>=6.3.0",
+    "regex>=2024.11.6",
+    "tqdm>=4.67.0",
+    "matplotlib>=3.9.0",
+    "scikit-image>=0.24.0",
+    "torchvision>=0.20.0",
+    "qdrant-client>=1.12.0",
+    "pillow>=11.0.0",
+    "aiohttp>=3.11.0",
+    "python-dotenv>=1.0.0",
+    "openai>=1.54.0",
+    "pydantic>=2.10.0",
+]
 
+[project.optional-dependencies]
+dev = [
+    "typing-inspect>=0.9.0",
+    "types-requests>=2.32.0",
+    "isort>=5.13.0",
+    "pytest>=8.3.0",
+    "pytest-cov>=6.0.0",
+    "coverage>=7.6.0",
+    "black>=24.10.0",
+    "pre-commit>=4.0.0",
+    "pylint>=3.3.0",
+    "testcontainers>=4.8.0",
+    "bcrypt>=4.2.0",
+]
 
-[tool.poetry.dev-dependencies]
-typing-inspect = "0.8.0"
-typing_extensions = "4.5.0"
-types-requests = "2.28.11.8"
-isort = "5.11.4"
-pytest = "7.3.1"
-pytest-cov = "4.0.0"
-coverage = "7.2.1"
-black = "23.3.0"
-pre-commit = "3.1.1"
-semver = "2.13.0"
-pylint = "2.16.2"
-testcontainers = "3.7.1"
-bcrypt = "4.0.1"
+[project.urls]
+Homepage = "https://zachhandley.com"
+Repository = "https://github.com/zachhandley/LlamaIndexAPI"
 
 # https://docs.pytest.org/en/latest/reference/customize.html
 [tool.pytest.ini_options]
@@ -77,6 +86,28 @@ target-version = ['py311']
 errors-only = true
 recursive = "y"
 
+[tool.isort]
+profile = "black"
+line_length = 80
+
+[tool.uv]
+dev-dependencies = [
+    "typing-inspect>=0.9.0",
+    "types-requests>=2.32.0",
+    "isort>=5.13.0",
+    "pytest>=8.3.0",
+    "pytest-cov>=6.0.0",
+    "coverage>=7.6.0",
+    "black>=24.10.0",
+    "pre-commit>=4.0.0",
+    "pylint>=3.3.0",
+    "testcontainers>=4.8.0",
+    "bcrypt>=4.2.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
